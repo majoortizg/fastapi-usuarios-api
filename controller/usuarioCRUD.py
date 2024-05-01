@@ -12,15 +12,16 @@ async def create_usuario(usuario: Usuario):
     usuario._id = str(result.inserted_id)
     return usuario
 
-@router.post("/", response_description="Listar usuarios", response_model=list[Usuario])
+@router.get("/", response_description="Listar usuarios", response_model=list[Usuario])
 async def read_usuarios():
-    usuarios= await list(collection.find().to_list(100))
+    usuarios = await collection.find().to_list(100)
     for usuario in usuarios:
         usuario["_id"] = str(usuario["_id"])
+        print(usuario)
     return usuarios
 
 @router.get("/{email}", response_model=Usuario)
-async def dind_usuario_by_email(email:str):
+async def find_usuario_by_email(email:str):
     usuario = await collection.find_one({"email": email})
 
     if usuario:
